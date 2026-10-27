@@ -1,0 +1,566 @@
+:root {
+  --bg: #070605;
+  --ink: #ece6df;
+  --ink-dim: rgba(236, 230, 223, 0.42);
+  --ember: #ff7a2e;
+  --ember-soft: rgba(255, 122, 46, 0.55);
+  --font: 'Jost Variable', 'Jost', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+.app {
+  position: fixed;
+  inset: 0;
+}
+
+.canvas {
+  position: absolute !important;
+  inset: 0;
+  touch-action: none;
+}
+
+/* ---------- loading veil ---------- */
+.veil {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  pointer-events: none;
+  transition: opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+}
+.veil--lifted {
+  opacity: 0;
+}
+.veil__ember {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #ffb45a;
+  box-shadow:
+    0 0 10px 3px rgba(255, 110, 30, 0.55),
+    0 0 36px 10px rgba(255, 70, 10, 0.18);
+  animation: ember-pulse 1.8s ease-in-out infinite;
+}
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ---------- overlay ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.4s ease 0.9s;
+}
+.overlay--visible {
+  opacity: 1;
+}
+
+.eyebrow {
+  position: absolute;
+  top: clamp(20px, 3.2vw, 34px);
+  left: clamp(20px, 3.2vw, 36px);
+  margin: 0;
+  font-size: 12px;
+  font-weight: 450;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+  user-select: none;
+}
+.eyebrow__sep {
+  margin: 0 0.55em;
+  color: var(--ink-dim);
+}
+.eyebrow__code {
+  color: var(--ember);
+}
+
+/* ---------- headline, up in the sky ---------- */
+.headline {
+  position: absolute;
+  left: 50%;
+  top: clamp(64px, 9vh, 96px);
+  transform: translateX(-50%);
+  width: min(92vw, 1040px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(12px, 1.8vh, 18px);
+  text-align: center;
+  user-select: none;
+}
+.headline__title {
+  margin: 0;
+  font-size: clamp(30px, min(3.3vw, 6vh), 52px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-shadow:
+    0 2px 26px rgba(0, 0, 0, 0.8),
+    0 0 2px rgba(0, 0, 0, 0.5);
+  text-wrap: balance;
+  animation: headline-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+/* after a hit, under the title */
+.headline__sub {
+  margin: 0;
+  padding-left: 0.4em; /* balances the tracking after the last letter */
+  font-size: clamp(11px, 0.95vw, 13px);
+  font-weight: 450;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ember);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.9);
+  animation: headline-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both;
+}
+@keyframes headline-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(3px);
+  }
+}
+
+/* ---------- the goal, just above the nocked arrow (the bow sets --tip) ---------- */
+.cue {
+  --tip: 76%;
+  --gap: clamp(14px, 2.6vh, 26px);
+  --lift: 0px;
+  position: absolute;
+  left: 50%;
+  top: var(--tip);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  transform: translate(-50%, calc(-100% - var(--gap) - var(--lift)));
+  font-size: clamp(15px, 0.4vw + 11px, 17px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-wrap: balance;
+  color: rgba(236, 230, 223, 0.92);
+  text-shadow:
+    0 1px 16px rgba(0, 0, 0, 0.95),
+    0 0 2px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.3s ease;
+}
+.cue em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ember);
+  text-shadow:
+    0 0 14px rgba(255, 96, 20, 0.6),
+    0 1px 16px rgba(0, 0, 0, 0.95);
+}
+/* out of the way while the bow is up: it drifts off toward the 404 */
+.cue--hide {
+  --lift: 10px;
+  opacity: 0;
+  filter: blur(3px);
+}
+/* it rises into place just after the title */
+.cue__text {
+  display: block;
+}
+.overlay--visible .cue__text {
+  animation: headline-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) 1.5s both;
+}
+
+/* ---------- pull hint, under the bow ---------- */
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 3.2vh, 32px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: rgba(236, 230, 223, 0.78);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.hint__text {
+  display: flex;
+  gap: 0.9em;
+}
+.hint__sep {
+  color: var(--ember);
+}
+.hint__gesture {
+  position: relative;
+  width: 14px;
+  height: 26px;
+  border: 1px solid rgba(236, 230, 223, 0.5);
+  border-radius: 8px;
+  flex: none;
+}
+.hint__dot {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 6px 1px rgba(255, 110, 30, 0.7);
+  animation: hint-pull 1.8s cubic-bezier(0.5, 0, 0.3, 1) infinite;
+}
+@keyframes hint-pull {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(13px);
+    opacity: 1;
+  }
+  75%,
+  100% {
+    transform: translateY(13px);
+    opacity: 0;
+  }
+}
+.hint--hide {
+  opacity: 0;
+  transform: translate(-50%, 8px);
+}
+.hint--pulse {
+  animation: hint-nudge 0.7s ease;
+}
+@keyframes hint-nudge {
+  30% {
+    color: #fff;
+    transform: translate(-50%, -4px);
+  }
+}
+
+/* ---------- reticle: where the drawn arrow will land ---------- */
+.reticle {
+  --draw: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+.reticle[data-state='on'],
+.reticle[data-state='lock'] {
+  opacity: 1;
+}
+.reticle[data-state='miss'] {
+  opacity: 0.55;
+}
+.reticle__ring {
+  position: absolute;
+  left: -17px;
+  top: -17px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 244, 232, 0.8);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transform: scale(calc(1.7 - var(--draw) * 0.7));
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.reticle__dot {
+  position: absolute;
+  left: -2.5px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff4e8;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+.reticle[data-state='lock'] .reticle__ring {
+  border-color: var(--ember);
+  box-shadow:
+    0 0 14px 2px rgba(255, 100, 24, 0.65),
+    inset 0 0 8px rgba(255, 100, 24, 0.5);
+  animation: reticle-lock 0.9s ease-in-out infinite;
+}
+.reticle[data-state='lock'] .reticle__dot {
+  background: #ffd2a8;
+  box-shadow: 0 0 8px 2px rgba(255, 110, 30, 0.9);
+}
+@keyframes reticle-lock {
+  50% {
+    transform: scale(calc(1.55 - var(--draw) * 0.7));
+  }
+}
+
+/* ---------- the way home: the text burns off with the world ---------- */
+.is-burning {
+  animation: burn-off 0.38s cubic-bezier(0.5, 0, 0.75, 0.25) var(--burn-delay, 0s) both;
+}
+@keyframes burn-off {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  /* catches: glows ember-hot… */
+  35% {
+    opacity: 1;
+    color: #ffd6a3;
+    border-color: rgba(255, 128, 48, 0.9);
+    text-shadow:
+      0 0 8px rgba(255, 130, 40, 0.95),
+      0 0 22px rgba(255, 74, 12, 0.75);
+    filter: blur(0.3px);
+  }
+  /* …and is gone */
+  100% {
+    opacity: 0;
+    color: #ff7a2e;
+    border-color: rgba(255, 90, 20, 0);
+    text-shadow: 0 0 24px rgba(255, 74, 12, 0);
+    filter: blur(6px);
+  }
+}
+
+/* once the canvas has burned to white, the page itself is white too (nothing left on top) */
+.whiteout {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.whiteout--on {
+  opacity: 1;
+}
+
+.home {
+  pointer-events: auto;
+  position: absolute;
+  top: calc(clamp(20px, 3.2vw, 34px) - 10px);
+  right: clamp(16px, 3vw, 34px);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 16px 9px 20px;
+  border: 1px solid rgba(236, 230, 223, 0.32);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(8, 7, 6, 0.28);
+  font: 500 10.5px/1 var(--font);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    border-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.45s ease,
+    background-color 0.35s ease;
+}
+.home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 140% at 50% 120%, rgba(255, 106, 30, 0.35), rgba(255, 106, 30, 0) 60%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.home__arrow {
+  width: 15px;
+  height: 10px;
+  color: var(--ember);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.home:hover,
+.home:focus-visible {
+  border-color: var(--ember-soft);
+  box-shadow:
+    0 0 0 1px rgba(255, 122, 46, 0.12),
+    0 8px 30px -6px rgba(255, 90, 20, 0.45);
+  background-color: rgba(14, 9, 6, 0.4);
+  outline: none;
+}
+.home:hover::before,
+.home:focus-visible::before {
+  opacity: 1;
+}
+.home:hover .home__arrow,
+.home:focus-visible .home__arrow {
+  transform: translateX(5px);
+}
+.home:active {
+  transform: translateY(1px);
+}
+
+/* ---------- fallbacks ---------- */
+/* without WebGL there's no bow: keep only the way home */
+.app:has(.fallback) .headline,
+.app:has(.fallback) .cue,
+.app:has(.fallback) .hint {
+  display: none;
+}
+
+.noscript,
+.fallback {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  text-align: center;
+  font-family: var(--font);
+  color: var(--ink);
+  background: radial-gradient(60% 50% at 50% 70%, #2a0f06 0%, var(--bg) 70%);
+}
+.noscript h1,
+.fallback h1 {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+.noscript a,
+.fallback a {
+  color: var(--ember);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.36em;
+  }
+  .home {
+    padding: 8px 12px 8px 15px;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+  }
+  .hint {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.26em;
+  }
+  .hint__text {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .hint__sep {
+    display: none;
+  }
+}
+
+@media (orientation: portrait) {
+  .headline__title {
+    font-size: clamp(30px, 8.4vw, 46px);
+  }
+}
+
+/* short landscape screens (phones on their side): tuck the headline up top */
+@media (max-height: 500px) and (orientation: landscape) {
+  .headline {
+    top: 14px;
+    gap: 6px;
+  }
+  .headline__title {
+    font-size: clamp(22px, 6.4vh, 30px);
+  }
+  .cue {
+    --gap: 10px;
+    font-size: 14px;
+  }
+  .hint {
+    bottom: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .veil,
+  .overlay {
+    transition-duration: 0.01s;
+    transition-delay: 0s;
+  }
+  .veil__ember,
+  .hint__dot,
+  .reticle[data-state='lock'] .reticle__ring,
+  .overlay--visible .cue__text {
+    animation: none;
+  }
+  .cue--hide {
+    --lift: 0px;
+    filter: none;
+  }
+  .is-burning {
+    animation-name: fade-off;
+    animation-duration: 0.3s;
+  }
+}
+@keyframes fade-off {
+  to {
+    opacity: 0;
+  }
+}

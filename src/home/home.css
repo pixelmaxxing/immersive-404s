@@ -1,0 +1,65 @@
+/* You made it: a plain white page, the opposite of where you've been. */
+.home-page {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #fff;
+  color: #141210;
+  font-family: 'Jost Variable', 'Jost', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.home-page h1 {
+  margin: 0;
+  font-size: clamp(30px, 5.4vw, 72px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-align: center;
+  animation: arrive 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+
+/* split into letters by main.ts: each one rises out of a blur, in turn */
+.home-page h1.is-split {
+  animation: none;
+}
+.home-page .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.home-page .char {
+  display: inline-block;
+  animation: settle 1.3s cubic-bezier(0.16, 1, 0.3, 1) calc(0.35s + var(--i) * 0.045s) both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em);
+    filter: blur(12px);
+  }
+  40% {
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page h1,
+  .home-page .char {
+    animation: arrive 0.6s ease both;
+  }
+  @keyframes arrive {
+    from {
+      opacity: 0;
+    }
+  }
+}
