@@ -1,6 +1,6 @@
 # THE LOST WORLD — interactive 3D 404
 
-![The Lost World: a stone 404 on a floating island above a lava lake, a bow held low in the foreground](docs/preview.jpg)
+![The Lost World in action: drawing the bow, hitting the 404, the monument collapsing and the world burning away to the home page](docs/demo.webp)
 
 A single-page, real-time WebGL 404 experience. You stand on a broken stone
 causeway in a sea of lava and look up at a floating island far ahead. On it
